@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"unsafe"
+)
 
 type Account struct {
 	Id   int64
@@ -63,4 +66,20 @@ func main() {
 		fmt.Printf("%p \n", pointer)
 	}
 
+	fmt.Println("AAAA")
+	x := 123
+
+	fmt.Println("pointer in main", &x)
+	p := pointTest(&x)
+	fmt.Println(x)
+	fmt.Println("Distance main to func:", uintptr(unsafe.Pointer(&x))-p)
+
+}
+func pointTest(t *int) uintptr {
+	fmt.Println("pointer of t", &t)
+	fmt.Println("pointer in func before", t)
+	z := 321
+	t = &z
+	fmt.Println("pointer in func after", t)
+	return uintptr(unsafe.Pointer(&t))
 }
