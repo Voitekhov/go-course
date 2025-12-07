@@ -20,6 +20,41 @@
 - https://metanit.com/c/tutorial/4.5.php  
 - https://habr.com/ru/companies/vk/articles/776766/
 
+
+#### Мифы 
+Многие считают, что если создается указатель, то он точно будет храниться в куче.  
+Это утверждение **неверно** и очень легко опровергается: 
+```go
+type UselessStruct struct {
+	someVal string
+}
+
+func someFunc() {
+	uselessStruct := UselessStruct{someVal: "123"}
+	uselessStructPointer := &UselessStruct{someVal: "123"}
+	doNoting(uselessStruct)
+	doNoting(uselessStructPointer)
+}
+
+func doNoting(val any) {
+
+}
+```
+Можно узнать где будут храниться данные в стеке или куче при помощи команды:
+>go build -gcflags=-m
+
+Увидим в консоли следующий вывод:
+```go
+./my.go:14:6: can inline doNoting
+./my.go:7:6: can inline someFunc
+./my.go:10:10: inlining call to doNoting
+./my.go:11:10: inlining call to doNoting
+./my.go:9:26: &UselessStruct{...} does not escape
+./my.go:10:11: uselessStruct does not escape
+./my.go:14:15: val does not escape
+```
+Вывод `does not escape` говорит нам о том, что `UselessStruct` не попал в кучу, а остался на стеке
+
 ---
 
 ## 🧱 2. Struct в Go
