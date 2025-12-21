@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"unsafe"
 )
 
 type Account struct {
@@ -42,15 +41,25 @@ func main() {
 	// Что вывелось в консоль?
 	account := Account{Id: 23, Name: "Mike"}
 	fmt.Printf("%p \n", &account)
-
+	// &account - адрес переменной account в памяти 0xc000092108
 	fmt.Println("---------- Вопрос №2 ----------")
 	// Что вывелось в консоль?
 	// Почему первый первый и второй вывод отличаются?
 	account2 := account
 	fmt.Printf("%p \n", &account2)
 	fmt.Printf("%p \n", &account)
-
+	// При создании новой переменной, хоть и равной первой для нее будет выделено новое место в памяти
 	fmt.Println("---------- Вопрос №3 ----------")
+	// Какие значения будут храниться в переменных a b c?
+	// Объясните каждый из выводов в консоль
+	a := 2  // 3
+	b := &a // 0xc00008c060
+	c := &a // 0xc00008c060
+	a++
+	fmt.Println(&a, &b, &c) // &a адрес переменной, b и c хранят адрес переменной a. При этом мы запрашиваем адреса b и c, это отдельные переменные и имеют свои адреса
+	fmt.Println(a, b, c)    // a=3, т.к. при выполнении кода она получила значение a++=3, b и с все еще хранят в себе адрес переменной a
+	fmt.Println(a, *b, *c)  // *b  и *с * выводит значение которое хранится по указанному адресу, соответствуют - 3
+	fmt.Println("---------- Вопрос №4 ----------")
 	// Почему в консоль постоянно выводятся различне адреса памяти,
 	// хотя при каждом вызове функции GetAccountsPointers мы работаем с одним и тем же accounts?
 
@@ -65,21 +74,7 @@ func main() {
 	for _, pointer := range pointers {
 		fmt.Printf("%p \n", pointer)
 	}
-
-	fmt.Println("AAAA")
-	x := 123
-
-	fmt.Println("pointer in main", &x)
-	p := pointTest(&x)
-	fmt.Println(x)
-	fmt.Println("Distance main to func:", uintptr(unsafe.Pointer(&x))-p)
-
 }
-func pointTest(t *int) uintptr {
-	fmt.Println("pointer of t", &t)
-	fmt.Println("pointer in func before", t)
-	z := 321
-	t = &z
-	fmt.Println("pointer in func after", t)
-	return uintptr(unsafe.Pointer(&t))
-}
+
+// a - переменная цикла, при каждой иттерацию в нее копируется значение, каждый раз мы добавляем указатель на временную переменную
+// при каждом вызове a - новый временный объект в куче, поэтому адреса меняются между вызовами
