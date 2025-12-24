@@ -43,7 +43,7 @@ func TestCombine(t *testing.T) {
 	}
 
 	for _, tc := range testTable {
-		got := Combine(tc.setA, tc.setB)
+		got := SetUnion(tc.setA, tc.setB)
 		require.Equal(t, tc.expected, got)
 	}
 }

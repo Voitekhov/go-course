@@ -84,6 +84,20 @@ func TestAddBook(t *testing.T) {
 
 	require.NoError(t, err)
 	require.Len(t, lib.Books, 6)
+
+	var added *Book
+	for i := range lib.Books {
+		if lib.Books[i].ID == 10 {
+			added = &lib.Books[i]
+			break
+		}
+	}
+
+	require.NotNil(t, added, "book with ID=10 must exist")
+	require.Equal(t, "New Book", added.Title)
+	require.Equal(t, "Someone", added.Author)
+	require.Equal(t, 2024, added.Year)
+	require.Equal(t, 123, added.Pages)
 }
 
 func TestAddBook_DuplicateID(t *testing.T) {
@@ -129,10 +143,10 @@ func TestMarkAsRead_NotFound(t *testing.T) {
 	require.Error(t, err)
 }
 
-func TestBookByYear(t *testing.T) {
+func TestGetBooksByYear(t *testing.T) {
 	lib := testLibrary()
 
-	result := lib.BookByYear(2016)
+	result := lib.getBooksByYear(2016)
 
 	require.Len(t, result, 1)
 	require.Equal(t, "Grokking Algorithms", result[0].Title)

@@ -8,8 +8,8 @@ import (
 
 func newCompany(name string) *ManagementCompany {
 	return &ManagementCompany{
-		Name:   name,
-		Houses: make(map[string]*House),
+		Name:            name,
+		HousesByAddress: make(map[string]*House),
 	}
 }
 
@@ -29,7 +29,7 @@ func TestConnectHouse(t *testing.T) {
 	require.NoError(t, err)
 	require.True(t, house.IsConnected)
 	require.Equal(t, mc, house.ManagedBy)
-	require.Contains(t, mc.Houses, "Pushkin st 10")
+	require.Contains(t, mc.HousesByAddress, "Pushkin st 10")
 }
 
 func TestConnectHouse_AlreadyConnected(t *testing.T) {
@@ -53,7 +53,7 @@ func TestDisconnectHouse(t *testing.T) {
 	require.NoError(t, err)
 	require.False(t, house.IsConnected)
 	require.Nil(t, house.ManagedBy)
-	require.NotContains(t, mc.Houses, house.Address)
+	require.NotContains(t, mc.HousesByAddress, house.Address)
 }
 
 func TestDisconnectHouse_FailedByDebt(t *testing.T) {
@@ -110,8 +110,8 @@ func TestChangeCompany_work(t *testing.T) {
 
 	require.NoError(t, err)
 	require.Equal(t, mc2, house.ManagedBy)
-	require.Contains(t, mc2.Houses, house.Address)
-	require.NotContains(t, mc1.Houses, house.Address)
+	require.Contains(t, mc2.HousesByAddress, house.Address)
+	require.NotContains(t, mc1.HousesByAddress, house.Address)
 }
 
 func TestChangeCompany_FailedByDebt(t *testing.T) {
@@ -125,6 +125,6 @@ func TestChangeCompany_FailedByDebt(t *testing.T) {
 
 	require.Error(t, err)
 	require.Equal(t, mc1, house.ManagedBy)
-	require.Contains(t, mc1.Houses, house.Address)
-	require.NotContains(t, mc2.Houses, house.Address)
+	require.Contains(t, mc1.HousesByAddress, house.Address)
+	require.NotContains(t, mc2.HousesByAddress, house.Address)
 }

@@ -61,14 +61,16 @@ func (l *Library) MarkAsRead(bookID int, user string, date time.Time) error {
 	for i := range l.Books {
 		if l.Books[i].ID == bookID {
 
-			for _, r := range l.Books[i].Readers {
+			readers := l.Books[i].Readers
+
+			for _, r := range readers {
 				if r.User == user {
 					return fmt.Errorf("user already marked as read")
 				}
 			}
 
 			l.Books[i].Readers = append(
-				l.Books[i].Readers,
+				readers,
 				ReadingInfo{
 					User: user,
 					Date: date,
@@ -81,7 +83,7 @@ func (l *Library) MarkAsRead(bookID int, user string, date time.Time) error {
 }
 
 // 5
-func (l *Library) BookByYear(Year int) []Book {
+func (l *Library) getBooksByYear(Year int) []Book {
 	var result []Book
 	for _, b := range l.Books {
 		if b.Year == Year {

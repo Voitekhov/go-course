@@ -54,7 +54,7 @@ func TestRemoveElementsByConditions(t *testing.T) {
 	}
 
 	for _, tc := range testTable {
-		RemoveElementsByConditions(tc.ratings, tc.limit)
-		require.Equal(t, tc.expected, tc.ratings)
+		got := RemoveElementsByConditions(tc.ratings, tc.limit)
+		require.Equal(t, tc.expected, got)
 	}
 }

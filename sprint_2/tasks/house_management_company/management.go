@@ -13,8 +13,8 @@ type House struct {
 }
 
 type ManagementCompany struct {
-	Name   string
-	Houses map[string]*House
+	Name            string
+	HousesByAddress map[string]*House
 }
 
 const MaxDebt = 100000
@@ -24,13 +24,13 @@ func (mc *ManagementCompany) ConnectHouse(house *House) error {
 		return errors.New("house already managed")
 	}
 
-	if mc.Houses == nil {
-		mc.Houses = make(map[string]*House)
+	if mc.HousesByAddress == nil {
+		mc.HousesByAddress = make(map[string]*House)
 	}
 
 	house.ManagedBy = mc
 	house.IsConnected = true
-	mc.Houses[house.Address] = house
+	mc.HousesByAddress[house.Address] = house
 	return nil
 }
 
@@ -43,14 +43,14 @@ func (mc *ManagementCompany) DisconnectHouse(house *House, forced bool) error {
 		return errors.New("cannot disconnect with debt")
 	}
 
-	delete(mc.Houses, house.Address)
+	delete(mc.HousesByAddress, house.Address)
 	house.ManagedBy = nil
 	house.IsConnected = false
 	return nil
 }
 
 func (mc *ManagementCompany) SendBills() {
-	for _, h := range mc.Houses {
+	for _, h := range mc.HousesByAddress {
 		fmt.Printf("Sending bills to %s\n", h.Address)
 	}
 }
@@ -69,14 +69,14 @@ func (house *House) ChangeCompany(newCompany *ManagementCompany) error {
 	}
 
 	if house.ManagedBy != nil {
-		delete(house.ManagedBy.Houses, house.Address)
+		delete(house.ManagedBy.HousesByAddress, house.Address)
 	}
 
 	house.ManagedBy = newCompany
 	house.IsConnected = true
-	if newCompany.Houses == nil {
-		newCompany.Houses = make(map[string]*House)
+	if newCompany.HousesByAddress == nil {
+		newCompany.HousesByAddress = make(map[string]*House)
 	}
-	newCompany.Houses[house.Address] = house
+	newCompany.HousesByAddress[house.Address] = house
 	return nil
 }

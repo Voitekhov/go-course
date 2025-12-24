@@ -52,6 +52,11 @@ func TestFindDifference(t *testing.T) {
 			setB:     map[int]bool{},
 			expected: map[int]bool{1: true, 2: true, 3: true, 5: true},
 		},
+		{
+			setA:     map[int]bool{1: true, 2: true, 3: true, 5: true},
+			setB:     map[int]bool{1: true, 2: true, 3: true, 5: true, 6: true},
+			expected: map[int]bool{},
+		},
 	}
 
 	for _, tc := range testTable {

@@ -1,6 +1,6 @@
 package sprint_2_answers
 
-func Combine(setA, setB map[string]bool) map[string]bool {
+func SetUnion(setA, setB map[string]bool) map[string]bool {
 	result := make(map[string]bool)
 
 	for k := range setA {

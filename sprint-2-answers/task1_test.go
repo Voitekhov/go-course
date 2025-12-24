@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestCountWords(t *testing.T) {
+func TestWordCountByWord(t *testing.T) {
 
 	testTable := []struct {
 		words    []string
@@ -35,7 +35,7 @@ func TestCountWords(t *testing.T) {
 	}
 
 	for _, tc := range testTable {
-		got := CountWords(tc.words)
+		got := wordCountByWord(tc.words)
 		require.Equal(t, tc.expected, got)
 	}
 }
