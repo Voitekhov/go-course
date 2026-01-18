@@ -75,4 +75,17 @@ func main() {
 	for _, pointer := range pointers {
 		fmt.Printf("%p \n", pointer)
 	}
+
+	fmt.Println("---------- Вопрос №5 ----------")
+	// Почему в sliceOfSlice 9 вывелась, а в copyOfS нет?
+	// почему используется s[:], а не s?
+	// если у sliceOfSlice и copyOfS будет тип [][]int, как сделать чтобы 9 была только в sliceOfSlice?
+	sliceOfSlice := [][2]int{{1, 2}, {3, 4}, {5, 6}}
+	var copyOfS [][]int
+	for _, s := range sliceOfSlice {
+		copyOfS = append(copyOfS, s[:])
+	}
+	sliceOfSlice[0][0] = 9
+	fmt.Println(sliceOfSlice)
+	fmt.Println(copyOfS)
 }
